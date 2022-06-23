@@ -4,27 +4,28 @@ var room = new importRoom(this);
 const wss = new WebSocket.Server({ port: 7071 });
 const clients = new Map();
 let timer;
-runBall();
-
 
 wss.on('connection', (ws) => {
 
     clients.set(ws);
-    room.ballUpdate();
 
     ws.on('message', (messageAsString) => {
       const message = JSON.parse(messageAsString);
-      const metadata = clients.get(ws);
 
       //registriere oder checke
       if(message.register !== undefined){
-        if(!room.checkRegister(message.register)){
+        var registerIndex = room.checkRegister(message.register);
+        if(registerIndex === false){
           return false;
         }
+        var messageBody = {
+          accepted: registerIndex,
+        };
+        messageBody = {...messageBody, ...room.getJSON(false)};
+        ws.send(JSON.stringify(messageBody));
       }else if(message.start !== undefined){
-        // if(!room.checkStart(message.register)){
-        //   return false;
-        // }
+        room.start();
+        runBall();
       }else{
         room.processRequest(message);
       }
@@ -41,11 +42,14 @@ wss.on('close', (ws) => {
 });
 
 function runBall(){
-
+  var that = this;
   if(this.timer !== undefined){
     clearInterval(this.timer);
   }
   this.timer = setInterval(() => {
+    if(!room.running){
+      clearInterval(that.timer);
+    }
     room.ballUpdate();
     [...clients.keys()].forEach((client) => {
       client.send(room.getJSON());

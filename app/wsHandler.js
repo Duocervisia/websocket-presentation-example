@@ -42,18 +42,17 @@ wsHandler = class{
     async setEvents(){
         this.ws.onmessage = (webSocketMessage) => {
             const messageBody = JSON.parse(webSocketMessage.data);
-
-            if(messageBody.id !== undefined){
-                this.game.room.ownId = messageBody.id;
-                this.game.room.initRoom(messageBody.room);
-
-            }else{
-                this.game.room.processServerRequest(messageBody);
-            }
+            this.game.room.processServerRequest(messageBody);
+            this.game.checkInputs();
         };
     }
 
-    async sendMessage( position){
+    start(){
+        const messageBody = { start: this.game.room.ownId};
+        this.ws.send(JSON.stringify(messageBody));
+    }
+
+    async sendMessage(position){
         const messageBody = { player: this.game.room.ownId , position: position };
         this.ws.send(JSON.stringify(messageBody));
     }

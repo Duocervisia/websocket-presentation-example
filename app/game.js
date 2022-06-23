@@ -8,11 +8,8 @@ Game = class {
     gameArea;
     ball;
 
-
-    leftTopValue = 0;
-    rightTopValue = 0;
-
     constructor(ws, player = 0) {
+        var that = this
         this.leftBar = $(".left-bar");
         this.rightBar = $(".right-bar");
         this.leftCounter = $(".left-counter");
@@ -26,127 +23,72 @@ Game = class {
         this.wsHandler = new wsHandler(this);
         this.wsHandler.connectToServer();
         this.room = new Room(this);
+
+        this.startButton.click(function(){
+            if(!$(this).hasClass("disabled")){
+                that.wsHandler.start();
+            }
+        });
     }
 
     update(){
-        var that = this;
-
-        this.room.players.forEach(function (player, i) {
-
-            if(player !== that.room.ownId){
-                switch(i){
-                    case 0:
-                        that.leftTopValue = that.room.playerPositions[i];
-                        break;
-                    case 1:
-                        that.rightTopValue = that.room.playerPositions[i];
-                        break;
-                }
-                
-            }
-        });
         this.updateCounter();
         this.updatePositions();
-    }
-
-    checkKey(e) {
-        var jump = 8;
-
-        switch(this.room.players.indexOf(this.room.ownId)){
-            case 0:
-                switch(e.which) {
-                    case 87: // w
-                        this.leftTopValue -= jump;
-                        break;
-                    case 83: // s
-                        this.leftTopValue += jump;
-                        break;
-                    default: return; // exit this handler for other keys
-                }
-
-                if(this.leftTopValue < 0){
-                    this.leftTopValue = 0;
-                }else if(this.leftTopValue + this.leftBar[0].scrollHeight > this.gameArea[0].scrollHeight){
-                    this.leftTopValue = this.gameArea[0].scrollHeight - this.leftBar[0].scrollHeight;
-                }
-                this.wsHandler.sendMessage(this.leftTopValue);
-                break;
-            case 1:
-                switch(e.which) {
-                    case 87: // w
-                        this.rightTopValue -= jump;
-                        break;
-                    case 83: // s
-                        this.rightTopValue += jump;
-                        break;
-                    default: return; // exit this handler for other keys
-                }
-
-                if(this.rightTopValue < 0){
-                    this.rightTopValue = 0;
-                }else if(this.rightTopValue + this.rightBar[0].scrollHeight > this.gameArea[0].scrollHeight){
-                    this.rightTopValue = this.gameArea[0].scrollHeight - this.rightBar[0].scrollHeight;
-                }
-                this.wsHandler.sendMessage(this.rightTopValue);
-                break;
-        }
-
-        this.updatePositions();
-        e.preventDefault(); // prevent the default action (scroll / move caret)
     }
 
     checkKey2(direction) {
         var jump = 2;
 
-        switch(this.room.players.indexOf(this.room.ownId)){
-            case 0:
-                switch(direction) {
-                    case "up": // w
-                        this.leftTopValue -= jump;
-                        break;
-                    case "down": // s
-                        this.leftTopValue += jump;
-                        break;
-                    default: return; // exit this handler for other keys
-                }
+        let indexOwnId = this.room.players.indexOf(this.room.ownId);
 
-                if(this.leftTopValue < 0){
-                    this.leftTopValue = 0;
-                }else if(this.leftTopValue + this.leftBar[0].scrollHeight > this.gameArea[0].scrollHeight){
-                    this.leftTopValue = this.gameArea[0].scrollHeight - this.leftBar[0].scrollHeight;
-                }
-                this.wsHandler.sendMessage(this.leftTopValue);
-                break;
-            case 1:
-                switch(direction) {
-                    case "up": // w
-                        this.rightTopValue -= jump;
-                        break;
-                    case "down": // s
-                        this.rightTopValue += jump;
-                        break;
-                    default: return; // exit this handler for other keys
-                }
-
-                if(this.rightTopValue < 0){
-                    this.rightTopValue = 0;
-                }else if(this.rightTopValue + this.rightBar[0].scrollHeight > this.gameArea[0].scrollHeight){
-                    this.rightTopValue = this.gameArea[0].scrollHeight - this.rightBar[0].scrollHeight;
-                }
-                this.wsHandler.sendMessage(this.rightTopValue);
-                break;
+        if(indexOwnId == -1){
+            return;
         }
 
+        let position = this.room.playerPositions[indexOwnId];
+
+        switch(direction) {
+            case "up": // w
+                position -= jump;
+                break;
+            case "down": // s
+                position += jump;
+                break;
+            default: return; // exit this handler for other keys
+        }
+
+        if(position < 0){
+            position = 0;
+        }else if(position + this.leftBar[0].scrollHeight > this.gameArea[0].scrollHeight){
+            position = this.gameArea[0].scrollHeight - this.leftBar[0].scrollHeight;
+        }
+
+        this.room.playerPositions[indexOwnId] = position;
+        this.wsHandler.sendMessage(position);
+
         this.updatePositions();
+    }
+
+    checkInputs() {
+        if(!this.room.running){
+            this.startButton.removeClass("hidden");
+            if(this.room.isRoomFull()){
+                this.startButton.removeClass("disabled");
+            }else{
+                this.startButton.addClass("disabled");
+            }
+        }else{
+            this.startButton.addClass("hidden");
+        }
     }
 
     updatePositions(){
         var that = this;
         this.leftBar.css( "top", function() {
-            return that.leftTopValue;
+            return that.room.playerPositions[0];
         });
         this.rightBar.css( "top", function() {
-            return that.rightTopValue;
+            return that.room.playerPositions[1];
         });
         this.ball.css( "top", function() {
             return that.room.ball.y;

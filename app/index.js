@@ -1,18 +1,13 @@
 $( document ).ready(function() {
     var game = new Game();
     
-    var keyInterval;
     var intervalDuration = 10;
 
     var upInterval;
     var downInterval;
 
-
-    // $(document).keypress(function(e) {
-    //     game.checkKey(e);
-    //   });
-
     $(document).keydown(function(e) {
+       
 
         switch(e.which) {
             //case 38: // up
@@ -37,13 +32,6 @@ $( document ).ready(function() {
 
         }
 
-        // if (!keyInterval) {
-        //     console.log("pressed up");
-        //     keyInterval = setInterval(() => {
-        //         game.checkKey(e);           
-        //     }, 50, game);
-        // }
-
         e.preventDefault(); // prevent the default action (scroll / move caret)
     });
 
@@ -63,8 +51,5 @@ $( document ).ready(function() {
                 break;
             default: return;
         }
-        
-        // clearInterval(keyInterval); 
-        // keyInterval = null;
     });
 });

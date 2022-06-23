@@ -3,11 +3,14 @@ Room = class{
     players = []
     playerPositions = [];
     playerPoints = [];
-    ball = {x: 50, y: 50};
+    ball = {x: 65, y: 50};
+    running = false;
+
     ownId = null;
     game;
+    startingPoints = 5;
     xStart = -2;
-    yStart = 2;
+    yStart = -2;
     xMove = this.xStart;
     yMove = this.yStart;
     increaseCounter = 0;
@@ -28,12 +31,14 @@ Room = class{
 
         if(this.ball.x < this.barOffset + this.ballRadius){
             if(this.playerPositions[0] < this.ball.y && this.playerPositions[0] + this.barHeight > this.ball.y){
+                this.ball.x = this.barOffset + this.ballRadius;
                 this.barHit();
             }else{
                 this.resetBall(0);
             }
         }else if (this.ball.x > this.width - this.ballRadius - this.barOffset){
             if(this.playerPositions[1] < this.ball.y && this.playerPositions[1] + this.barHeight > this.ball.y){
+                this.ball.x = this.width - this.ballRadius - this.barOffset;
                 this.barHit();
             }else{
                 this.resetBall(1);
@@ -58,12 +63,24 @@ Room = class{
         }
     }
 
+    start(){
+        this.running = true;
+        for(var i = 0; i < this.playerPoints.length; i++){
+            this.playerPoints[i] = this.startingPoints
+        }
+    }
+
     resetBall(playerIndex){
         this.ball.x = this.width/2;
         this.ball.y = this.height/2;
         this.playerPoints[playerIndex] -= 1;
         this.increaseCounter = 0;
         this.xMove = this.xStart;
+        this.yMove = this.yStart;
+
+        if(this.playerPoints[playerIndex] <= 0){
+            this.running = false;
+        }
     }
 
     isRoomFull(){
@@ -78,7 +95,7 @@ Room = class{
         }
         var index = this.players.push(id)-1;
         this.playerPositions[index] = 0;
-        this.playerPoints[index] = 5;
+        this.playerPoints[index] = this.startingPoints;
         return index;
     }
     getJSON(parse = true){
@@ -87,7 +104,8 @@ Room = class{
              players: this.players,
              playerPositions: this.playerPositions, 
              ball: this.ball, 
-             playerPoints: this.playerPoints
+             playerPoints: this.playerPoints,
+             running: this.running
         };
 
         if(parse){
@@ -103,9 +121,10 @@ Room = class{
         this.players = message.players;
         this.ball = message.ball;
         this.playerPoints = message.playerPoints;
+        this.running = message.running;
 
         message.players.forEach(function (player, i) {
-            if(player !== that.ownId){
+            if(message.accepted !== undefined || player !== that.ownId){
                 that.playerPositions[i] = message.playerPositions[i];
             }
         });
@@ -124,14 +143,13 @@ Room = class{
 
     checkRegister(id){
         let index = this.players.indexOf(id);
-        if(index == -1){
+        if(index === -1){
             if(!this.isRoomFull()){
-                this.addPlayer(id);
-                return true;
+                return this.addPlayer(id);
             }
             return false;
         }
-        return true;
+        return index;
     }
 }
 
