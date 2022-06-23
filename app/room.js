@@ -83,7 +83,13 @@ Room = class{
     }
     getJSON(parse = true){
 
-        var messageBody = { players: this.players, playerPositions: this.playerPositions, ball: this.ball, playerPoints: this.playerPoints };
+        var messageBody = {
+             players: this.players,
+             playerPositions: this.playerPositions, 
+             ball: this.ball, 
+             playerPoints: this.playerPoints
+        };
+
         if(parse){
             return JSON.stringify(messageBody)
         }

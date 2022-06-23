@@ -17,6 +17,7 @@ Game = class {
         this.rightBar = $(".right-bar");
         this.leftCounter = $(".left-counter");
         this.rightCounter = $(".right-counter");
+        this.startButton = $(".start-button");
 
         this.ball = $(".ball");
 
