@@ -15,14 +15,14 @@ wss.on('connection', (ws) => {
       //registriere oder checke
       if(message.register !== undefined){
         var registerIndex = room.checkRegister(message.register);
-        if(registerIndex === false){
-          return false;
+        
+        if(registerIndex !== false){
+          var messageBody = {
+            accepted: registerIndex,
+          };
+          messageBody = {...messageBody, ...room.getJSON(false)};
+          ws.send(JSON.stringify(messageBody));
         }
-        var messageBody = {
-          accepted: registerIndex,
-        };
-        messageBody = {...messageBody, ...room.getJSON(false)};
-        ws.send(JSON.stringify(messageBody));
       }else if(message.start !== undefined){
         room.start();
         runBall();
