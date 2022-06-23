@@ -1,23 +1,72 @@
+@font-face {
+    font-family: 'game';
+    src: URL('dpcomic.ttf') format('truetype');
+ }
+
 body {
-    height: 100vh;
+    /* height: 100vh;
     margin: 0;
-    background-color: aliceblue;
+    background-color: aliceblue; */
     overflow: hidden;
-    cursor: none;
+    /* cursor: none; */
+    font-family: 'game', Fallback, sans-serif;
+
 }
 
-p {
-    display: block;
-    margin-top: -8px;
-}
 
-input{
-    margin-top: -12px;
-    background-color: transparent;
-}
-.cursor {
-    width: 24px;
-    transition: all ease;
-    display:block;
+
+.game-field{
     position: absolute;
+    width: 800px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+}
+.counter{
+    display: flex;
+    background: pink;
+    height: 50px;
+}
+.counter-tile{
+    width: 50%;
+    text-align: center;
+    font-size: 50px;
+
+}
+.game-area{
+    background-color: brown;
+    width: 100%;
+    height: calc(100% - 50px);
+    position: relative;
+}
+
+.bar{
+    background-color: pink;
+    height: 80px;
+    width: 10px;
+    border-radius: 5px;
+    position: absolute;
+    /* transition: all 0.1s ease-in-out; */
+
+}
+.left-bar{
+    left: 5px;
+}
+.right-bar{
+    right: 5px;
+}
+.ball{
+    width: 16px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: green;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    /* transition: all 0.1s ease-in-out; */
 }
