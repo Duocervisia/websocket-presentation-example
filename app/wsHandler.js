@@ -9,7 +9,7 @@ wsHandler = class{
 
     async connectToServer() {
         var that = this;
-        const newWS = new WebSocket('ws://localhost:7071/ws');
+        const newWS = new WebSocket('ws://192.168.188.55:7071/ws');
         await new Promise((resolve, reject) => {
             const timer = setInterval(() => {
 

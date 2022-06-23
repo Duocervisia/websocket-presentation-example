@@ -9,7 +9,7 @@ Room = class{
     ownId = null;
     game;
     startingPoints = 5;
-    xStart = -2;
+    xStart = 2;
     yStart = -2;
     xMove = this.xStart;
     yMove = this.yStart;

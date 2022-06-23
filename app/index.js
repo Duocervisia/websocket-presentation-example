@@ -13,7 +13,6 @@ $( document ).ready(function() {
             //case 38: // up
             case 87: // w
                 if (!upInterval) {
-                    console.log("pressed up");
                     upInterval = setInterval(() => {
                         game.checkKey2("up");           
                     }, intervalDuration, game);
@@ -22,7 +21,6 @@ $( document ).ready(function() {
             //case 40: // down
             case 83: // s
                 if (!downInterval) {
-                    console.log("pressed down");
                     downInterval = setInterval(() => {
                         game.checkKey2("down");           
                     }, intervalDuration, game);
@@ -36,7 +34,6 @@ $( document ).ready(function() {
     });
 
     $(document).keyup(function(e) {
-        console.log("up");
 
         switch(e.which) {
             //case 38: // up

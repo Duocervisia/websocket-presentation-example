@@ -22,6 +22,10 @@ wss.on('connection', (ws) => {
           };
           messageBody = {...messageBody, ...room.getJSON(false)};
           ws.send(JSON.stringify(messageBody));
+
+          [...clients.keys()].forEach((client) => {
+            client.send(room.getJSON());
+          });
         }
       }else if(message.start !== undefined){
         room.start();
@@ -29,10 +33,6 @@ wss.on('connection', (ws) => {
       }else{
         room.processRequest(message);
       }
-
-      [...clients.keys()].forEach((client) => {
-        client.send(room.getJSON());
-      });
     });  
 });
 
@@ -54,7 +54,7 @@ function runBall(){
     [...clients.keys()].forEach((client) => {
       client.send(room.getJSON());
     });
-  }, 10, room, clients);
+  }, 33, room, clients);
 }
 
 console.log("wss up");
