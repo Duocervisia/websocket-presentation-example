@@ -6,7 +6,7 @@ Room = class{
     ball = {x: 50, y: 50};
     ownId = null;
     game;
-    xStart = 2;
+    xStart = -2;
     yStart = 2;
     xMove = this.xStart;
     yMove = this.yStart;
@@ -15,8 +15,6 @@ Room = class{
     ballRadius = 8;
     barHeight = 80;
     barOffset = 15;
-    
-
     width = 800;
     height = 450;
 
@@ -30,33 +28,15 @@ Room = class{
 
         if(this.ball.x < this.barOffset + this.ballRadius){
             if(this.playerPositions[0] < this.ball.y && this.playerPositions[0] + this.barHeight > this.ball.y){
-                this.xMove = -this.xMove;
-                this.increaseCounter++;
-                if(this.xMove < 0){
-                    this.xMove -= this.increaseCounter * this.xStart * this.increaseFactor;
-                }else{
-                    this.xMove += this.increaseCounter * this.xStart * this.increaseFactor;
-                }
+                this.barHit();
             }else{
-                this.resetBall();
-                this.playerPoints[0] -= 1;
-                this.increaseCounter = 0;
-                this.xMove = this.xStart;
+                this.resetBall(0);
             }
         }else if (this.ball.x > this.width - this.ballRadius - this.barOffset){
             if(this.playerPositions[1] < this.ball.y && this.playerPositions[1] + this.barHeight > this.ball.y){
-                this.xMove = -this.xMove;
-                this.increaseCounter++;
-                if(this.xMove < 0){
-                    this.xMove -= this.increaseCounter * this.xStart * this.increaseFactor;
-                }else{
-                    this.xMove += this.increaseCounter * this.xStart * this.increaseFactor;
-                }
+                this.barHit();
             }else{
-                this.resetBall();
-                this.playerPoints[1] -= 1;
-                this.increaseCounter = 0;
-                this.xMove = this.xStart;
+                this.resetBall(1);
             }
         }
 
@@ -68,10 +48,22 @@ Room = class{
             this.yMove = -this.yMove
         }
     }
+    barHit(){
+        this.xMove = -this.xMove;
+        this.increaseCounter++;
+        if(this.xMove < 0){
+            this.xMove -= this.increaseCounter * this.xStart * this.increaseFactor;
+        }else{
+            this.xMove += this.increaseCounter * this.xStart * this.increaseFactor;
+        }
+    }
 
-    resetBall(){
+    resetBall(playerIndex){
         this.ball.x = this.width/2;
         this.ball.y = this.height/2;
+        this.playerPoints[playerIndex] -= 1;
+        this.increaseCounter = 0;
+        this.xMove = this.xStart;
     }
 
     isRoomFull(){

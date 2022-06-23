@@ -9,7 +9,7 @@ wsHandler = class{
 
     async connectToServer() {
         var that = this;
-        const newWS = new WebSocket('ws://141.45.58.136:7071/ws');
+        const newWS = new WebSocket('ws://localhost:7071/ws');
         await new Promise((resolve, reject) => {
             const timer = setInterval(() => {
 
@@ -38,6 +38,7 @@ wsHandler = class{
 
         this.ws.send(JSON.stringify(messageBody));
     } 
+    
     async setEvents(){
         this.ws.onmessage = (webSocketMessage) => {
             const messageBody = JSON.parse(webSocketMessage.data);

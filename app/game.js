@@ -50,64 +50,93 @@ Game = class {
 
     checkKey(e) {
         var jump = 8;
-      
-
 
         switch(this.room.players.indexOf(this.room.ownId)){
             case 0:
                 switch(e.which) {
-    
-                    //case 38: // up
-                    case 119: // w
+                    case 87: // w
                         this.leftTopValue -= jump;
                         break;
-            
-                    //case 40: // down
-                    case 115: // s
+                    case 83: // s
                         this.leftTopValue += jump;
                         break;
                     default: return; // exit this handler for other keys
                 }
+
                 if(this.leftTopValue < 0){
                     this.leftTopValue = 0;
                 }else if(this.leftTopValue + this.leftBar[0].scrollHeight > this.gameArea[0].scrollHeight){
                     this.leftTopValue = this.gameArea[0].scrollHeight - this.leftBar[0].scrollHeight;
                 }
                 this.wsHandler.sendMessage(this.leftTopValue);
-
                 break;
             case 1:
                 switch(e.which) {
-    
-                    //case 38: // up
-                    case 119: // w
+                    case 87: // w
                         this.rightTopValue -= jump;
                         break;
-            
-                    //case 40: // down
-                    case 115: // s
+                    case 83: // s
                         this.rightTopValue += jump;
                         break;
                     default: return; // exit this handler for other keys
                 }
+
                 if(this.rightTopValue < 0){
                     this.rightTopValue = 0;
                 }else if(this.rightTopValue + this.rightBar[0].scrollHeight > this.gameArea[0].scrollHeight){
                     this.rightTopValue = this.gameArea[0].scrollHeight - this.rightBar[0].scrollHeight;
                 }
-
                 this.wsHandler.sendMessage(this.rightTopValue);
-
                 break;
-
         }
 
-       
+        this.updatePositions();
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    }
+
+    checkKey2(direction) {
+        var jump = 2;
+
+        switch(this.room.players.indexOf(this.room.ownId)){
+            case 0:
+                switch(direction) {
+                    case "up": // w
+                        this.leftTopValue -= jump;
+                        break;
+                    case "down": // s
+                        this.leftTopValue += jump;
+                        break;
+                    default: return; // exit this handler for other keys
+                }
+
+                if(this.leftTopValue < 0){
+                    this.leftTopValue = 0;
+                }else if(this.leftTopValue + this.leftBar[0].scrollHeight > this.gameArea[0].scrollHeight){
+                    this.leftTopValue = this.gameArea[0].scrollHeight - this.leftBar[0].scrollHeight;
+                }
+                this.wsHandler.sendMessage(this.leftTopValue);
+                break;
+            case 1:
+                switch(direction) {
+                    case "up": // w
+                        this.rightTopValue -= jump;
+                        break;
+                    case "down": // s
+                        this.rightTopValue += jump;
+                        break;
+                    default: return; // exit this handler for other keys
+                }
+
+                if(this.rightTopValue < 0){
+                    this.rightTopValue = 0;
+                }else if(this.rightTopValue + this.rightBar[0].scrollHeight > this.gameArea[0].scrollHeight){
+                    this.rightTopValue = this.gameArea[0].scrollHeight - this.rightBar[0].scrollHeight;
+                }
+                this.wsHandler.sendMessage(this.rightTopValue);
+                break;
+        }
 
         this.updatePositions();
-
-        e.preventDefault(); // prevent the default action (scroll / move caret)
-
     }
 
     updatePositions(){

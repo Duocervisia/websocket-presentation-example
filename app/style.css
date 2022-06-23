@@ -3,6 +3,10 @@
     src: URL('dpcomic.ttf') format('truetype');
  }
 
+ *{
+    font-family: 'game', Fallback, sans-serif;
+ }
+
 body {
     /* height: 100vh;
     margin: 0;
@@ -10,42 +14,45 @@ body {
     overflow: hidden;
     /* cursor: none; */
     font-family: 'game', Fallback, sans-serif;
-
+    background-color: #121212;
 }
-
-
 
 .game-field{
     position: absolute;
-    width: 800px;
-    height: 500px;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background-color: red;
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px 5px #ffffff78;
 }
 .counter{
     display: flex;
-    background: pink;
-    height: 50px;
+    background: #3700B3;
+    height: 45px;
+    width: 800px;
+    color: #03DAC6;
 }
 .counter-tile{
     width: 50%;
     text-align: center;
     font-size: 50px;
-
+}
+.line{
+    height: 5px;
+    background-color: #03DAC6;
 }
 .game-area{
-    background-color: brown;
+    background-color: #cf6679;
     width: 100%;
-    height: calc(100% - 50px);
+    height: 450px;
     position: relative;
 }
 
 .bar{
-    background-color: pink;
+    background-color: #3700B3;
     height: 80px;
     width: 10px;
     border-radius: 5px;
@@ -63,10 +70,40 @@ body {
     width: 16px;
     aspect-ratio: 1;
     border-radius: 50%;
-    background-color: green;
+    background-color: #3700B3;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     /* transition: all 0.1s ease-in-out; */
+}
+
+.start{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    /* background-color: #3700B3; */
+    width: 20%;
+    height: 15%;
+    border-radius: 10px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    /* box-shadow: 0 0 10px 5px #ffffff78; */
+}
+
+button{
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #03DAC6;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 10px 5px #ffffff78;
+
+    /* border: 2px solid white; */
+}
+button.disabled{
+    cursor: not-allowed;
+    background-color: #00695f;
 }
