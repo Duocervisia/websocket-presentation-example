@@ -9,7 +9,7 @@ wsHandler = class{
 
     async connectToServer() {
         var that = this;
-        const newWS = new WebSocket('ws://192.168.188.55:7071/ws');
+        const newWS = new WebSocket('ws://192.168.188.52:7071/ws');
         await new Promise((resolve, reject) => {
             const timer = setInterval(() => {
 
@@ -40,7 +40,7 @@ wsHandler = class{
     } 
     
     async setEvents(){
-        this.ws.onmessage = (webSocketMessage) => {
+        this.ws.onmessage = async (webSocketMessage) => {
             const messageBody = JSON.parse(webSocketMessage.data);
             this.game.room.processServerRequest(messageBody);
             this.game.checkInputs();

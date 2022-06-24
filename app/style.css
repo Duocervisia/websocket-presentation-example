@@ -81,7 +81,6 @@ body {
     top: 120%;
     left: 120%;
     transform: translate(-50%,-50%);
-    /* transition: all 0.1s ease-in-out; */
 }
 
 .start-button{

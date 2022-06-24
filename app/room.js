@@ -9,12 +9,11 @@ Room = class{
     ownId = null;
     game;
     startingPoints = 5;
-    xStart = 2;
-    yStart = -2;
-    xMove = this.xStart;
-    yMove = this.yStart;
+    startSpeed = 3;
+    xMove = this.startSpeed;
+    yMove = this.startSpeed;
     increaseCounter = 0;
-    increaseFactor = 0.3;
+    increaseFactor = 0.1;
     ballRadius = 8;
     barHeight = 80;
     barOffset = 15;
@@ -57,9 +56,14 @@ Room = class{
         this.xMove = -this.xMove;
         this.increaseCounter++;
         if(this.xMove < 0){
-            this.xMove -= this.increaseCounter * this.xStart * this.increaseFactor;
+            this.xMove -= this.increaseCounter * this.startSpeed * this.increaseFactor;
         }else{
-            this.xMove += this.increaseCounter * this.xStart * this.increaseFactor;
+            this.xMove += this.increaseCounter * this.startSpeed * this.increaseFactor;
+        }
+        if(this.yMove < 0){
+            this.yMove -= this.increaseCounter * this.startSpeed * this.increaseFactor;
+        }else{
+            this.yMove += this.increaseCounter * this.startSpeed * this.increaseFactor;
         }
     }
 
@@ -75,8 +79,8 @@ Room = class{
         this.ball.y = this.height/2;
         this.playerPoints[playerIndex] -= 1;
         this.increaseCounter = 0;
-        this.xMove = this.xStart;
-        this.yMove = this.yStart;
+        this.xMove = this.startSpeed;
+        this.yMove = this.startSpeed;
 
         if(this.playerPoints[playerIndex] <= 0){
             this.running = false;

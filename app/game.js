@@ -84,12 +84,17 @@ Game = class {
 
     updatePositions(){
         var that = this;
-        this.leftBar.css( "top", function() {
-            return that.room.playerPositions[0];
-        });
-        this.rightBar.css( "top", function() {
-            return that.room.playerPositions[1];
-        });
+        if(this.leftBar.position().top !== that.room.playerPositions[0]){
+            this.leftBar.css( "top", function() {
+                return that.room.playerPositions[0];
+            });
+        }
+
+        if(this.rightBar.position().top !== that.room.playerPositions[1]){
+            this.rightBar.css( "top", function() {
+                return that.room.playerPositions[1];
+            });
+        }
         this.ball.css( "top", function() {
             return that.room.ball.y;
         });
@@ -99,10 +104,10 @@ Game = class {
     }
 
     updateCounter(){
-        if(this.room.playerPoints[0] !== undefined){
+        if(this.room.playerPoints[0] !== undefined && this.room.playerPoints[0] != this.leftCounter.text()){
             this.leftCounter.text(this.room.playerPoints[0]);
         }
-        if(this.room.playerPoints[1] !== undefined){
+        if(this.room.playerPoints[1] !== undefined && this.room.playerPoints[1] != this.rightCounter.text()){
             this.rightCounter.text(this.room.playerPoints[1]);
         }
     }
