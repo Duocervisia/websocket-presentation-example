@@ -43,7 +43,7 @@ wss.on('close', (ws) => {
 });
 
 
-var tickLengthMs = 1000 / 60
+var tickLengthMs = 1000 / 20
 var previousTick = Date.now()
 var actualTicks = 0
 

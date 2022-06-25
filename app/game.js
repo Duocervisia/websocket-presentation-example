@@ -29,6 +29,16 @@ Game = class {
                 that.wsHandler.start();
             }
         });
+
+        this.app = new PIXI.Application(this.gameArea.width(), this.gameArea.height(), {transparent: true, antialias: true, });
+        this.mainContainer = new PIXI.Container();
+        this.gameArea[0].appendChild(this.app.view);
+
+        this.ballPixi = new Ball(this);
+        this.app.stage.addChild(this.mainContainer);
+
+
+
     }
 
     update(){
@@ -95,12 +105,14 @@ Game = class {
                 return that.room.playerPositions[1];
             });
         }
-        this.ball.css( "top", function() {
-            return that.room.ball.y;
-        });
-        this.ball.css( "left", function() {
-            return that.room.ball.x;
-        });
+
+        this.ballPixi.update(that.room.ball);
+        // this.ball.css( "top", function() {
+        //     return that.room.ball.y;
+        // });
+        // this.ball.css( "left", function() {
+        //     return that.room.ball.x;
+        // });
     }
 
     updateCounter(){
