@@ -8,6 +8,9 @@ Game = class {
     gameArea;
     ball;
 
+    isApi = false;
+
+
     constructor(ws, player = 0) {
         var that = this
         this.leftBar = $(".left-bar");
