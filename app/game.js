@@ -27,6 +27,7 @@ Game = class {
         this.wsHandler.connectToServer();
         this.room = new Room(this);
 
+
         this.startButton.click(function(){
             if(!$(this).hasClass("disabled")){
                 that.wsHandler.start();
@@ -39,6 +40,8 @@ Game = class {
 
         this.ballPixi = new Ball(this);
         this.app.stage.addChild(this.mainContainer);
+
+        this.renderer = new Renderer(this);
 
 
 
@@ -96,7 +99,22 @@ Game = class {
     }
 
     updatePositions(){
+       
+        this.updateBarPositions();
+
+        this.ballPixi.update(this.room.ball);
+        // this.ball.css( "top", function() {
+        //     return that.room.ball.y;
+        // });
+        // this.ball.css( "left", function() {
+        //     return that.room.ball.x;
+        // });
+    }
+
+    updateBarPositions(){
+
         var that = this;
+
         if(this.leftBar.position().top !== that.room.playerPositions[0]){
             this.leftBar.css( "top", function() {
                 return that.room.playerPositions[0];
@@ -108,14 +126,6 @@ Game = class {
                 return that.room.playerPositions[1];
             });
         }
-
-        this.ballPixi.update(that.room.ball);
-        // this.ball.css( "top", function() {
-        //     return that.room.ball.y;
-        // });
-        // this.ball.css( "left", function() {
-        //     return that.room.ball.x;
-        // });
     }
 
     updateCounter(){

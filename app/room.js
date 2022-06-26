@@ -19,6 +19,8 @@ Room = class{
     barOffset = 15;
     width = 800;
     height = 450;
+    
+    ballEvent = false;
 
     constructor(game){
         this.game = game;
@@ -65,6 +67,7 @@ Room = class{
         }else{
             this.yMove += this.increaseCounter * this.startSpeed * this.increaseFactor;
         }
+        this.ballEvent = true;
     }
 
     start(){
@@ -75,15 +78,19 @@ Room = class{
     }
 
     resetBall(playerIndex){
-        this.ball.x = this.width/2;
-        this.ball.y = this.height/2;
-        this.playerPoints[playerIndex] -= 1;
-        this.increaseCounter = 0;
-        this.xMove = this.startSpeed;
-        this.yMove = this.startSpeed;
+        if(this.game.isApi){
+            this.ball.x = this.width/2;
+            this.ball.y = this.height/2;
+            this.playerPoints[playerIndex] -= 1;
+            this.increaseCounter = 0;
+            this.xMove = this.startSpeed;
+            this.yMove = this.startSpeed;
+    
+            if(this.playerPoints[playerIndex] <= 0){
+                this.running = false;
+            }
 
-        if(this.playerPoints[playerIndex] <= 0){
-            this.running = false;
+            this.ballEvent = true;
         }
     }
 
@@ -102,37 +109,53 @@ Room = class{
         this.playerPoints[index] = this.startingPoints;
         return index;
     }
-    getJSON(parse = true){
+    getJSON(customMessage = false){
 
         var messageBody = {
              players: this.players,
              playerPositions: this.playerPositions, 
-             ball: this.ball, 
+             ball: this.ball,
+             xMove: this.xMove, 
+             yMove: this.yMove, 
              playerPoints: this.playerPoints,
              running: this.running
         };
+        messageBody = {...customMessage, ...messageBody};
 
-        if(parse){
-            return JSON.stringify(messageBody)
-        }
-
-        return messageBody
+        return JSON.stringify(messageBody)
+     
     }
 
     processServerRequest(message){
         var that = this;
+        var startedRunning = false;
 
         this.players = message.players;
-        this.ball = message.ball;
         this.playerPoints = message.playerPoints;
+
+        if(this.running === false && message.running === true){
+            startedRunning = true;
+        }
+
         this.running = message.running;
+
+        if(message.update === true){
+            this.ball = message.ball;
+            this.xMove = message.xMove;
+            this.yMove = message.yMove;
+        }
 
         message.players.forEach(function (player, i) {
             if(message.accepted !== undefined || player !== that.ownId){
                 that.playerPositions[i] = message.playerPositions[i];
             }
         });
+
+        if(startedRunning){
+            this.game.renderer.gameLoop();
+        }
         this.game.update();
+        this.game.checkInputs();
     }
 
     processRequest(message){

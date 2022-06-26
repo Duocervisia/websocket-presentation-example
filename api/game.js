@@ -1,6 +1,3 @@
-
-
-
 Game = class {
   
 
@@ -42,12 +39,7 @@ Game = class {
                   var messageBody = {
                     accepted: registerIndex,
                   };
-                  messageBody = {...messageBody, ...that.room.getJSON(false)};
-                  ws.send(JSON.stringify(messageBody));
-        
-                  [...that.clients.keys()].forEach((client) => {
-                    client.send(that.room.getJSON());
-                  });
+                  ws.send(that.room.getJSON(messageBody));
                 }
               }else if(message.start !== undefined){
                 that.room.start();
@@ -55,7 +47,10 @@ Game = class {
               }else{
                 that.room.processRequest(message);
               }
-            
+
+              [...that.clients.keys()].forEach((client) => {
+                client.send(that.room.getJSON());
+              });
             });  
         });
         

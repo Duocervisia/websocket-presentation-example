@@ -43,7 +43,6 @@ wsHandler = class{
         this.ws.onmessage = async (webSocketMessage) => {
             const messageBody = JSON.parse(webSocketMessage.data);
             this.game.room.processServerRequest(messageBody);
-            this.game.checkInputs();
         };
     }
 
