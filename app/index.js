@@ -5,24 +5,30 @@ $( document ).ready(function() {
 
     var upInterval;
     var downInterval;
+    var delta;
 
     $(document).keydown(function(e) {
-       
+        delta = Date.now();
 
         switch(e.which) {
             //case 38: // up
             case 87: // w
                 if (!upInterval) {
                     upInterval = setInterval(() => {
-                        game.checkKey2("up");           
-                    }, intervalDuration, game);
+                        var now = Date.now();
+                        game.checkKey2("up", now - delta );  
+                        delta = now;         
+                    }, intervalDuration, game, delta);
                 }
                 break;
             //case 40: // down
             case 83: // s
                 if (!downInterval) {
                     downInterval = setInterval(() => {
-                        game.checkKey2("down");           
+                        var now = Date.now();
+                        game.checkKey2("down", now - delta);   
+                        delta = now;         
+        
                     }, intervalDuration, game);
                 }
                 break;
@@ -47,6 +53,14 @@ $( document ).ready(function() {
                 downInterval = null;
                 break;
             default: return;
+        }
+    });
+
+    $(document).keypress(function(e){
+        switch(e.which) {
+            case 32: // space
+                game.wsHandler.spacePress();
+                break;
         }
     });
 });

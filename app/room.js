@@ -5,7 +5,8 @@ Room = class{
     playerPoints = [];
     ball = {x: 65, y: 50};
     running = false;
-
+    spacePressable = false;
+    
     ownId = null;
     game;
     startingPoints = 5;
@@ -82,9 +83,10 @@ Room = class{
         this.xMove = this.startSpeed;
         this.yMove = this.startSpeed;
 
-        if(this.playerPoints[playerIndex] <= 0){
-            this.running = false;
+        if(!(this.playerPoints[playerIndex] <= 0)){
+            this.spacePressable = true;
         }
+        this.running = false;
     }
 
     isRoomFull(){
@@ -109,7 +111,8 @@ Room = class{
              playerPositions: this.playerPositions, 
              ball: this.ball, 
              playerPoints: this.playerPoints,
-             running: this.running
+             running: this.running,
+             spacePressable: this.spacePressable
         };
 
         if(parse){
@@ -126,7 +129,8 @@ Room = class{
         this.ball = message.ball;
         this.playerPoints = message.playerPoints;
         this.running = message.running;
-
+        this.spacePressable = message.spacePressable;
+        
         message.players.forEach(function (player, i) {
             if(message.accepted !== undefined || player !== that.ownId){
                 that.playerPositions[i] = message.playerPositions[i];

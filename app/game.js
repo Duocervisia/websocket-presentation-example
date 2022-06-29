@@ -18,6 +18,7 @@ Game = class {
         this.leftCounter = $(".left-counter");
         this.rightCounter = $(".right-counter");
         this.startButton = $(".start-button");
+        this.spacePress = $(".space-press");
 
         this.ball = $(".ball");
 
@@ -49,8 +50,9 @@ Game = class {
         this.updatePositions();
     }
 
-    checkKey2(direction) {
-        var jump = 2;
+    checkKey2(direction, delta) {
+
+        var jump = 2 * (delta/10);
 
         let indexOwnId = this.room.players.indexOf(this.room.ownId);
 
@@ -83,7 +85,7 @@ Game = class {
     }
 
     checkInputs() {
-        if(!this.room.running){
+        if(!this.room.running && !this.room.spacePressable){
             this.startButton.removeClass("hidden");
             if(this.room.isRoomFull()){
                 this.startButton.removeClass("disabled");
@@ -92,6 +94,11 @@ Game = class {
             }
         }else{
             this.startButton.addClass("hidden");
+        }
+        if(!this.room.running && this.room.spacePressable){
+            this.spacePress.removeClass("hidden");
+        }else{
+            this.spacePress.addClass("hidden");
         }
     }
 

@@ -89,6 +89,13 @@ body {
     left: 50%;
     transform: translate(-50%,-50%);
 }
+.space-press{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 60px;
+}
 
 button{
     padding: 10px 20px;
@@ -104,6 +111,6 @@ button.disabled{
     cursor: not-allowed;
     background-color: #00695f;
 }
-button.hidden{
+.hidden{
     display: none;
 }

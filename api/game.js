@@ -52,6 +52,9 @@ Game = class {
               }else if(message.start !== undefined){
                 that.room.start();
                 that.renderer.gameLoop();
+              }else if(message.space !== undefined){
+                that.room.running = true;
+                that.renderer.gameLoop();
               }else{
                 that.room.processRequest(message);
               }

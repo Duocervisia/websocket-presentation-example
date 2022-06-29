@@ -10,6 +10,8 @@ Renderer = class{
 
     gameLoop() {
         var that = this;
+        this.game.room.spacePressable = false;
+        
         function loopFunction() {
  
             var now = Date.now();

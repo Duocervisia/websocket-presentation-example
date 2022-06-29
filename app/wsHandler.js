@@ -9,7 +9,7 @@ wsHandler = class{
 
     async connectToServer() {
         var that = this;
-        const newWS = new WebSocket('ws://192.168.188.52:7071/ws');
+        const newWS = new WebSocket('ws://141.45.58.50:7071/ws');
         await new Promise((resolve, reject) => {
             const timer = setInterval(() => {
 
@@ -49,6 +49,11 @@ wsHandler = class{
 
     start(){
         const messageBody = { start: this.game.room.ownId};
+        this.ws.send(JSON.stringify(messageBody));
+    }
+
+    spacePress(){
+        const messageBody = { space: this.game.room.ownId};
         this.ws.send(JSON.stringify(messageBody));
     }
 
